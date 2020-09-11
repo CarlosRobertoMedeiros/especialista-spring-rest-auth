@@ -40,6 +40,20 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .scopes("write","read")
                 .accessTokenValiditySeconds(6 * 60 * 60) //6 horas (Padrão é 12 horas)
                 .refreshTokenValiditySeconds(60 * 24 * 60 * 60 ) //60 dias
+
+            .and()
+                .withClient("foodanalytics")
+                .secret(passwordEncoder.encode("food123"))
+                .authorizedGrantTypes("authorization_code")
+                .scopes("write","read")
+                .redirectUris("http://www.foodanalytics.local:8082")
+
+            .and()
+                .withClient("faturamento")
+                .secret(passwordEncoder.encode("faturamento123"))
+                .authorizedGrantTypes("client_credentials") //Normalmente Se usa para serviços em 2 plano
+                .scopes("read")
+
             .and()
                 .withClient("checktoken")
                 .secret(passwordEncoder.encode("check123"));
