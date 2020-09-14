@@ -6,6 +6,7 @@ package com.example.algafood.auth;
  */
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,6 +18,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -83,8 +85,15 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
             .authenticationManager(authenticationManager)
             .userDetailsService(userDetailsService)
             .reuseRefreshTokens(false)
+            .accessTokenConverter(jwtAccessTokenConverter())
             .tokenGranter(tokenGranter(endpoints));//Linha com Pkce e Authorization Code
+    }
 
+    @Bean
+    public JwtAccessTokenConverter jwtAccessTokenConverter(){
+        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
+        jwtAccessTokenConverter.setSigningKey("ashnfjashdfu8afhusafniw4we4e5hj4");//HMAC-Sha256
+        return jwtAccessTokenConverter;
     }
 
     private TokenGranter tokenGranter(AuthorizationServerEndpointsConfigurer endpoints) {
