@@ -1,4 +1,4 @@
-package com.example.algafood.auth;
+package com.example.algafood.auth.core;
 /*
  *  @criado em: 08/09/2020 - {09:47}
  *  @projeto  : algafood-api
@@ -21,6 +21,7 @@ import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
 import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
@@ -91,11 +92,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+        tokenEnhancerChain.setTokenEnhancers(
+                Arrays.asList(new JwtCustomClaimsTokenEnhancer(),jwtAccessTokenConverter()));
+
         endpoints
             .authenticationManager(authenticationManager)
             .userDetailsService(userDetailsService)
             .reuseRefreshTokens(false)
             .accessTokenConverter(jwtAccessTokenConverter())
+            .tokenEnhancer(tokenEnhancerChain)
             .approvalStore(approvalStore(endpoints.getTokenStore())) //depois do accessTokenConverter Obrigado
             .tokenGranter(tokenGranter(endpoints));//Linha com Pkce e Authorization Code
     }

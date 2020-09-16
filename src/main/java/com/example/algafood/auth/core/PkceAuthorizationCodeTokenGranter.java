@@ -1,4 +1,4 @@
-package com.example.algafood.auth;
+package com.example.algafood.auth.core;
 /*
  *  @criado em: 11/09/2020 - {05:48}
  *  @projeto  : algafood-api

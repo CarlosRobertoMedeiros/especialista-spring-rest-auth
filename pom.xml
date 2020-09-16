@@ -18,6 +18,7 @@
         <java.version>1.8</java.version>
         <spring-security-oauth2.version>2.3.7.RELEASE</spring-security-oauth2.version>
         <spring-security-jwt.version>1.0.11.RELEASE</spring-security-jwt.version>
+        <mariadb-java-client.version>2.6.0</mariadb-java-client.version>
     </properties>
 
     <dependencies>
@@ -73,6 +74,23 @@
 <!--            <artifactId>hibernate-validator</artifactId>-->
 <!--            <version>5.2.4.Final</version>-->
 <!--        </dependency>-->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+            <version>${mariadb-java-client.version}</version>
+        </dependency>
 
     </dependencies>
 
