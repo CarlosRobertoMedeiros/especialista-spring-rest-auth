@@ -54,7 +54,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .withClient("algafood-web")
                 .secret(passwordEncoder.encode("web123"))
                 .authorizedGrantTypes("password", "refresh_token") //O Padrão do Refresh Toke é 30 dias
-                .scopes("write","read")
+                .scopes("WRITE","READ")
                 .accessTokenValiditySeconds(6 * 60 * 60) //6 horas (Padrão é 12 horas)
                 .refreshTokenValiditySeconds(60 * 24 * 60 * 60 ) //60 dias
 
@@ -62,20 +62,20 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .withClient("foodanalytics")
                 .secret(passwordEncoder.encode("food123"))
                 .authorizedGrantTypes("authorization_code")
-                .scopes("write","read")
+                .scopes("WRITE","READ")
                 .redirectUris("http://www.foodanalytics.local:8082")
 
             .and()
                 .withClient("webadmin")
                 .authorizedGrantTypes("implicit")
-                .scopes("write","read")
+                .scopes("WRITE","READ")
                 .redirectUris("http://aplicacao-cliente")
 
             .and()
                 .withClient("faturamento")
                 .secret(passwordEncoder.encode("faturamento123"))
                 .authorizedGrantTypes("client_credentials") //Normalmente Se usa para serviços em 2 plano
-                .scopes("read")
+                .scopes("READ")
 
             .and()
                 .withClient("checktoken")
