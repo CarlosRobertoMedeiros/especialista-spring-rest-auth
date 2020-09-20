@@ -26,6 +26,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
+import javax.sql.DataSource;
 import java.security.KeyPair;
 import java.util.Arrays;
 import java.util.List;
@@ -33,9 +34,6 @@ import java.util.List;
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter{
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -46,40 +44,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private JwtKeyStoreProperties jwtKeyStoreProperties;
 
+    @Autowired
+    private DataSource dataSource;
+
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         //Configura os Clientes no Authorization Server
-        clients
-            .inMemory()
-                .withClient("algafood-web")
-                .secret(passwordEncoder.encode("web123"))
-                .authorizedGrantTypes("password", "refresh_token") //O Padrão do Refresh Toke é 30 dias
-                .scopes("WRITE","READ")
-                .accessTokenValiditySeconds(6 * 60 * 60) //6 horas (Padrão é 12 horas)
-                .refreshTokenValiditySeconds(60 * 24 * 60 * 60 ) //60 dias
-
-            .and()
-                .withClient("foodanalytics")
-                .secret(passwordEncoder.encode("food123"))
-                .authorizedGrantTypes("authorization_code")
-                .scopes("WRITE","READ")
-                .redirectUris("http://www.foodanalytics.local:8082")
-
-            .and()
-                .withClient("webadmin")
-                .authorizedGrantTypes("implicit")
-                .scopes("WRITE","READ")
-                .redirectUris("http://aplicacao-cliente")
-
-            .and()
-                .withClient("faturamento")
-                .secret(passwordEncoder.encode("faturamento123"))
-                .authorizedGrantTypes("client_credentials") //Normalmente Se usa para serviços em 2 plano
-                .scopes("READ")
-
-            .and()
-                .withClient("checktoken")
-                .secret(passwordEncoder.encode("check123"));
+        clients.jdbc(dataSource);
     }
 
     @Override
